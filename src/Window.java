@@ -19,12 +19,13 @@ public class Window extends JPanel implements ActionListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int dimensions = 500;
+	private int dimensions = 505;
+	private int size = dimensions/5;
 	private final int DELAY = 15; // make this higher if you want it to be slower
 	private Timer timer;
 	private int x = 0;
 	private int y = 0;
-	public Rooms[][][] rooms = new Rooms[100][100][2];
+	public Rooms[][][] rooms = new Rooms[size][size][2];
 	public Window(){
         setBackground(Color.black);
         setPreferredSize(new Dimension(dimensions, dimensions));
@@ -42,9 +43,15 @@ public class Window extends JPanel implements ActionListener{
 		// TODO Auto-generated method stub
 		repaint();
 	}
+	private int complexity(){
+		int complexity = 0;
+		
+		return complexity;
+	}
 	private void buildMaze(){
 		if( x == 0 && y == 0){
 			start(x, y);
+			rooms[size-1][size-1][0] = new EndPoint();
 		}
 		while(!deadend()){
 			generateMaze();
@@ -53,8 +60,22 @@ public class Window extends JPanel implements ActionListener{
 				retrace();
 			}
 		}
+		connectEnd();
 	}
-	
+	private void connectEnd(){
+		if(rooms[size-3][size-1][0] instanceof Rooms && rooms[size-1][size-3][0] instanceof Rooms){
+			int temp = (int) (Math.random()*2);
+			if(temp == 0){
+				rooms[size-2][size-1][0] = new Connector();
+			} else if(temp == 1){
+				rooms[size-1][size-2][0] = new Connector();
+			}
+		} else if(rooms[size-3][size-1][0] instanceof Rooms){
+			rooms[size-2][size-1][0] = new Connector();
+		} else if(rooms[size-1][size-3][0] instanceof Rooms){
+			rooms[size-1][size-2][0] = new Connector();
+		}
+	}
 	private void generateMaze(){
 		int direction = (int) (Math.random()*4);
 		System.out.println(direction);
@@ -235,6 +256,9 @@ public class Window extends JPanel implements ActionListener{
 				}
 				if(rooms[ii][i][1] instanceof Character){
 					((Character) rooms[ii][i][1]).draw(g, x, y);
+				}
+				if(rooms[ii][i][0] instanceof EndPoint){
+					((EndPoint) rooms[ii][i][0]).draw(g, x, y);
 				}
 			}
 		}

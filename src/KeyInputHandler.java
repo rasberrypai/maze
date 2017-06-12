@@ -45,8 +45,8 @@ public class KeyInputHandler implements KeyListener {
         }
     }
 	private void findCharacter(){
-		for(int ii = 0; ii < 100; ii++){
-			for(int i = 0; i < 100; i++){
+		for(int ii = 0; ii < Run.win.rooms.length; ii++){
+			for(int i = 0; i < Run.win.rooms.length; i++){
 				if(Run.win.rooms[i][ii][1] instanceof Character){
 					this.characterX = i;
 					this.characterY = ii;
